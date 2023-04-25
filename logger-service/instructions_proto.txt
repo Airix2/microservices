@@ -1,0 +1,4 @@
+download from https://grpc.io/docs/protoc-installation/ the one for your OS, extract the protoc.exe from the bin, and put it on /go/bin in program files.
+
+then rung in /logger-service/logs/ the following command
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative logs.proto
