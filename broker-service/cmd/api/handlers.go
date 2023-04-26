@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/rpc"
 	"time"
@@ -40,6 +41,7 @@ type MailPayload struct {
 }
 
 func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hit the broker")
 	payload := jsonResponse{
 		Error:   false,
 		Message: "Hit the broker",
@@ -49,6 +51,7 @@ func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hit the broker in handle")
 	var requestPayload RequestPayload
 
 	err := app.readJSON(w, r, &requestPayload)

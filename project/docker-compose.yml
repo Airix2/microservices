@@ -1,14 +1,36 @@
 version: '3'
 
 services:
+  caddy:
+    build:
+      context: ./
+      dockerfile: ./caddy.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "80:80"
+      - "443:443"
+      - "5000:5000"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+  front-end:
+    build:
+      context: ./../frontend
+      dockerfile: ./../frontend/frontend.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      BROKER_URL: "http://localhost:5000"
 
   broker-service:
     build:
       context: ./../broker-service
       dockerfile: ./../broker-service/broker-service.dockerfile
     restart: always
-    ports:
-      - "8080:80"
     deploy:
       mode: replicated
       replicas: 1
@@ -28,8 +50,6 @@ services:
       context: ./../authentication-service
       dockerfile: ./../authentication-service/authentication-service.dockerfile
     restart: always
-    ports:
-      - "8081:80"
     deploy:
       mode: replicated
       replicas: 1
@@ -104,3 +124,8 @@ services:
       replicas: 1
     volumes:
       - ./db-data/rabbitmq/:/var/lib/rabbitmq/
+
+volumes:
+    caddy_data:
+        external: true
+    caddy_config:
